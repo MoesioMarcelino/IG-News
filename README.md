@@ -5,7 +5,7 @@
 
 <hr>
 
-<h1 align="center">Learning Next (Client-side, SSR and SSG)</h1>
+<h1 align="center">Learning Next (CSR, SSR and SSG)</h1>
 
 
 <p align="center">
@@ -53,13 +53,13 @@
 
 ## :dart: About ##
 
-This is an application to learn NextJS, and how can I use Client-side, Server-side Rendering (SSR) and Static-site Generation. The goal's to provide posts of news.
+This is an application to learn NextJS, and how can I use Client Side Rendering (CSR), Server Side Rendering (SSR) and Static Site Generation. The goal's to provide posts of news.
 
 <div id="features" ></div>
 
 ## :sparkles: Features ##
 :heavy_check_mark: Subscriptions on stripe;\
-:heavy_check_mark: Application using Client-side;\
+:heavy_check_mark: Application using Client-side Rendering;\
 :heavy_check_mark: Application using Server-Side Rendering;\
 :heavy_check_mark: Application using Static-Site Generation;\
 
