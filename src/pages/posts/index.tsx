@@ -1,8 +1,24 @@
 import React from 'react';
 import Head from 'next/head';
+import { GetStaticProps } from 'next';
+import Prismic from '@prismicio/client';
+import { RichText } from 'prismic-dom';
+
+import { getPrismicClient } from '../../services/prismic';
+
 import styles from './styles.module.scss';
 
-export default function Posts() {
+type Post = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  updatedAt: string;
+};
+interface PostsProps {
+  posts: Post[];
+}
+
+export default function Posts({ posts }: PostsProps) {
   return (
     <>
       <Head>
@@ -11,56 +27,46 @@ export default function Posts() {
 
       <main className={styles.container}>
         <div className={styles.post}>
-          <a href="#">
-            <time>12 de março de 2021</time>
-            <strong>What is Lorem Ipsum?</strong>
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </p>
-          </a>
-          <a href="#">
-            <time>12 de março de 2021</time>
-            <strong>What is Lorem Ipsum?</strong>
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </p>
-          </a>
-          <a href="#">
-            <time>12 de março de 2021</time>
-            <strong>What is Lorem Ipsum?</strong>
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </p>
-          </a>
+          {posts.map(({ slug, updatedAt, title, excerpt }) => (
+            <a href="#" key={slug}>
+              <time>{updatedAt}</time>
+              <strong>{title}</strong>
+              <p>{excerpt}</p>
+            </a>
+          ))}
         </div>
       </main>
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+
+  const response = await prismic.query(
+    [Prismic.predicates.at('document.type', 'post')],
+    {
+      fetch: ['post.title', 'post.content'],
+      pageSize: 15,
+    }
+  );
+
+  const posts = response.results.map(
+    ({ uid, data, last_publication_date }) => ({
+      slug: uid,
+      title: RichText.asText(data.title),
+      excerpt:
+        data.content.find((content) => content.type === 'paragraph')?.text ??
+        '',
+      updatedAt: new Date(last_publication_date).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      }),
+    })
+  );
+
+  return {
+    props: { posts },
+  };
+};
