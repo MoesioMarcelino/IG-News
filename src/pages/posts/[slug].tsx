@@ -3,10 +3,9 @@ import { getSession } from 'next-auth/client';
 import Head from 'next/head';
 import { RichText } from 'prismic-dom';
 import { getPrismicClient } from '../../services/prismic';
+import styles from '../../styles/pages/post.module.scss';
 
-import styles from './post.module.scss';
-
-interface PostProps {
+interface IPostProps {
   post: {
     slug: string;
     title: string;
@@ -15,22 +14,19 @@ interface PostProps {
   };
 }
 
-export default function Post({
-  post: { title, updatedAt, content },
-}: PostProps) {
+export default function Post({ post }: IPostProps) {
   return (
     <>
       <Head>
-        <title>{title} | IgNews</title>
+        <title>{post.title} | ig.news</title>
       </Head>
-
       <main className={styles.container}>
         <article className={styles.post}>
-          <h1>{title}</h1>
-          <time>{updatedAt}</time>
+          <h1>{post.title}</h1>
+          <time>{post.updatedAt}</time>
           <div
             className={styles.postContent}
-            dangerouslySetInnerHTML={{ __html: content }}
+            dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>
       </main>
@@ -44,15 +40,16 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const session = await getSession({ req });
   const { slug } = params;
-
-  // if (!session) {
-
-  // }
-
+  if (!session?.activeSubscription) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
   const prismic = getPrismicClient(req);
-
   const response = await prismic.getByUID('post', String(slug), {});
-
   const post = {
     slug,
     title: RichText.asText(response.data.title),
@@ -66,8 +63,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       }
     ),
   };
-
   return {
-    props: { post },
+    props: {
+      post,
+    },
   };
 };
