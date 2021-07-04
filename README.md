@@ -103,8 +103,8 @@ $ yarn dev // or npm start
 # Server starts on http://localhost:3000
 ```
 
-Feito com :heart: por <a href="https://moesiomarcelino.dev" target="_blank">Moésio Marcelino</a>
+Developed with :heart: by <a href="https://moesiomarcelino.dev" target="_blank">Moésio Marcelino</a>
 
 &#xa0;
 
-<a href="#top">Voltar ao topo</a>
+<a href="#top">Back top</a>
