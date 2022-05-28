@@ -14,7 +14,7 @@
   <a href="#techs">Technologies</a> &#xa0; | &#xa0;
   <a href="#requirements">Requeriments</a> &#xa0; | &#xa0;
   <a href="#start">Start</a> &#xa0; | &#xa0;
-  <a href="https://moesiomarcelino.dev" target="_blank">Author</a>
+  <a href="https://moesiomarcelino.com" target="_blank">Author</a>
 </p>
 
 <br>
@@ -103,7 +103,7 @@ $ yarn dev // or npm start
 # Server starts on http://localhost:3000
 ```
 
-Developed with :heart: by <a href="https://moesiomarcelino.dev" target="_blank">Moésio Marcelino</a>
+Developed with :heart: by <a href="https://moesiomarcelino.com" target="_blank">Moésio Marcelino</a>
 
 &#xa0;
 
